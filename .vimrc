@@ -1,3 +1,5 @@
+set nocompatible
+
 " Enable relative line numbers
 set relativenumber
 set number  " Also show absolute line number for current line
@@ -13,7 +15,6 @@ nnoremap <expr> j v:count ? 'j' : 'gj'
 nnoremap <expr> k v:count ? 'k' : 'gk'
 
 " Enable syntax highlighting
-syntax enable
 syntax on
 
 " Configure indentation
@@ -31,6 +32,7 @@ set linebreak      " Break lines at word boundaries
 set scrolloff=3
 " Save with <leader>w
 nnoremap <leader>w :w<CR>
+
 
 " Additional suggested settings
 set cursorline     " Highlight the current line
@@ -52,6 +54,8 @@ set matchtime=2  " Show matching bracket for 0.2 seconds
 set lazyredraw       " Don't redraw while running macros (performance)
 set ttyfast          " Speed up redrawing
 set noswapfile
+set synmaxcol=200
+
 
 " Set indentation rules per filetype
 augroup FiletypeIndent
