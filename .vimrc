@@ -50,3 +50,17 @@ set mouse=a        " Enable mouse support in all modes
 set laststatus=2   " Always show the status line
 set ruler          " Show cursor position in status line
 set showmatch      " Highlight matching brackets/parentheses
+set lazyredraw       " Don't redraw while running macros (performance)
+set ttyfast          " Speed up redrawing
+
+" Set indentation rules per filetype
+augroup FiletypeIndent
+  autocmd!
+  autocmd FileType python   setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
+  autocmd FileType javascript,typescript,json,yaml setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+  autocmd FileType html,css,scss setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+  autocmd FileType lua      setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+  autocmd FileType make     setlocal noexpandtab tabstop=4 shiftwidth=4 softtabstop=0
+augroup END
+filetype plugin indent on
+
