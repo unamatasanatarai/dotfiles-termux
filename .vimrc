@@ -9,10 +9,8 @@ inoremap jk <Esc>
 let mapleader = " "
 
 " Ensure hjkl works on wrapped lines (multiline navigation)
-nnoremap j gj
-nnoremap k gk
-nnoremap gj j
-nnoremap gk k
+nnoremap <expr> j v:count ? 'j' : 'gj'
+nnoremap <expr> k v:count ? 'k' : 'gk'
 
 " Enable syntax highlighting
 syntax enable
@@ -42,7 +40,7 @@ set hlsearch       " Highlight all search matches
 set ignorecase     " Case-insensitive searching
 set smartcase      " Case-sensitive if uppercase is used in search
 set wildmenu       " Enhanced command-line completion
-set wildmode=list:longest,full  " List all matches and complete to longest
+set wildmode=longest:full,full
 set backspace=indent,eol,start  " Allow backspace over indents, line breaks, etc.
 set visualbell     " Use visual bell instead of beeping
 set t_vb=          " Disable visual bell flashing
@@ -50,8 +48,10 @@ set mouse=a        " Enable mouse support in all modes
 set laststatus=2   " Always show the status line
 set ruler          " Show cursor position in status line
 set showmatch      " Highlight matching brackets/parentheses
+set matchtime=2  " Show matching bracket for 0.2 seconds
 set lazyredraw       " Don't redraw while running macros (performance)
 set ttyfast          " Speed up redrawing
+set noswapfile
 
 " Set indentation rules per filetype
 augroup FiletypeIndent
