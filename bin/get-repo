@@ -1,0 +1,26 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+# Validate required argument
+if [ -z "$1" ]; then
+    echo "Usage: $0 <repository-name>"
+    exit 1
+fi
+
+REPO_NAME="$1"
+USERNAME=$(whoami)
+DEVICE_IP=$(ifconfig 2>/dev/null | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}' | grep '^192\.168')
+
+SSH_PORT=8022
+REPO_DIR="$HOME/storage/shared/Vault/git"
+
+# Ensure ".git" suffix
+if [[ ! "$REPO_NAME" =~ \.git$ ]]; then
+    REPO_NAME="${REPO_NAME}.git"
+fi
+
+REPO_PATH="$REPO_DIR/$REPO_NAME"
+
+echo ""
+echo "git clone ssh://$USERNAME@$DEVICE_IP:$SSH_PORT/storage/emulated/0/Vault/git/$REPO_NAME"
+echo "cd ${REPO_NAME%.git}"
+echo -e "git branch -m main master"
