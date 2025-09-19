@@ -1,6 +1,6 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!/bin/bash
 
-# Validate required argument
+# Check if repository name is provided
 if [ -z "$1" ]; then
     echo "Usage: $0 <repository-name>"
     exit 1
@@ -8,28 +8,56 @@ fi
 
 REPO_NAME="$1"
 USERNAME=$(whoami)
-DEVICE_IP=$(ifconfig 2>/dev/null | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}' | grep '^192\.168')
-
+DEVICE_IP=$(ifconfig 2>/dev/null | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}' | grep '^192.168' | head -n 1)
 SSH_PORT=8022
 REPO_DIR="$HOME/storage/shared/Vault/git"
 
-# Ensure ".git" suffix
+# Append .git to repository name if not present
 if [[ ! "$REPO_NAME" =~ \.git$ ]]; then
     REPO_NAME="${REPO_NAME}.git"
 fi
 
-# Create and initialize repository
+# Create repository directory
 mkdir -p "$REPO_DIR"
-cd "$REPO_DIR"
+cd "$REPO_DIR" || exit 1
 
+# Initialize bare repository
 git init --bare "$REPO_NAME"
 chmod -R 700 "$REPO_NAME"
 
-REPO_PATH="$REPO_DIR/$REPO_NAME"
+# Add repository to safe.directory to avoid ownership errors
+git config --global --add safe.directory "$REPO_DIR/$REPO_NAME"
 
-git config --global --add safe.directory "$REPO_PATH"
+# Use Termux's tmp directory (usually /data/data/com.termux/files/usr/tmp)
+WORK_DIR="${TMPDIR:-$HOME/tmp}/git-work-$(basename "$REPO_NAME" .git)"
+mkdir -p "$WORK_DIR"
+cd "$WORK_DIR" || exit 1
 
-echo ""
-echo "git clone ssh://$USERNAME@$DEVICE_IP:$SSH_PORT/storage/emulated/0/Vault/git/$REPO_NAME"
-echo "cd ${REPO_NAME%.git}"
-echo -e "git branch -m main master"
+# Clone the bare repository locally
+git clone "$REPO_DIR/$REPO_NAME" .
+git checkout -b master  # Using 'main' as the default branch
+
+# Create .gitignore file
+cat <<EOT > .gitignore
+.DS_Store
+.idea/
+*.swp
+*.swo
+*.bak
+*.log
+Thumbs.db
+EOT
+
+# Add, commit, and push .gitignore
+git add .gitignore
+git commit -m "Add .gitignore for macOS"
+git push origin master
+
+# Clean up temporary working directory
+cd "$REPO_DIR"
+rm -rf "$WORK_DIR"
+
+# Output success message
+echo "Repository created successfully."
+echo "Clone with:"
+echo "    git clone ssh://$USERNAME@$DEVICE_IP:$SSH_PORT/storage/emulated/0/Vault/git/$REPO_NAME"
