@@ -1,7 +1,7 @@
-*
-!.gitignore
-!.bashrc
-!.vimrc
-!bin
-!.termux
-!.install
+.bash_history
+.ssh/
+.viminfo
+storage/
+tmp/
+.lesshst
+.gitconfig
