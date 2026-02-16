@@ -1,5 +1,5 @@
 export PATH="$HOME/bin:$PATH"
-./.termux/boot/start-sshd
+source "$HOME/.termux/boot/start-sshd"
 
 
 USERNAME=$(whoami)
