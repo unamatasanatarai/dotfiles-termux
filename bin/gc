@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+###############################################################################
+# gic
+#
+# Description:
+#   A simple Git helper script that stages all changes and commits them
+#   with a message. If no message is provided, it defaults to "WIP".
+#
+#   Supports:
+#     - Custom commit messages via arguments
+#     - Multiple -m flags for multiline commits
+#     - Detection of empty staged changes (prevents empty commits)
+#
+# Usage:
+#   ./gic                        # Commits all changes with message "WIP"
+#   ./gic "Message here"     # Commits with a custom message
+#
+###############################################################################
+
+message=${*:-"WIP"}
+
+# Stage all changes (new, modified, deleted files)
+git add --all
+
+# Check if there are staged changes; exit if there's nothing to commit
+if git diff --cached --quiet; then
+  echo "No changes to commit."
+  exit 0
+fi
+
+# Commit the staged changes with the constructed message
+git commit -m "$message"

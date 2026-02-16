@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# Get current branch name
+current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+
+# Make sure we're in a Git repo
+if [ -z "$current_branch" ]; then
+  echo "Error: Not inside a Git repository."
+  exit 1
+fi
+
+# Fetch latest from remote to compare status
+git fetch origin "$current_branch" >/dev/null 2>&1
+
+# Check if there are commits to push
+ahead_count=$(git rev-list --count HEAD ^origin/"$current_branch")
+
+if [ "$ahead_count" -eq 0 ]; then
+  echo "Nothing to push. Your branch is up to date with origin/$current_branch."
+  exit 0
+else
+  echo "You have $ahead_count commit(s) ahead of origin/$current_branch."
+fi
+
+# Push to origin
+git push origin "$current_branch"
