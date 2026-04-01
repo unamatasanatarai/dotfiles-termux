@@ -21,6 +21,5 @@ fi
 REPO_PATH="$REPO_DIR/$REPO_NAME"
 
 echo ""
-echo "git clone ssh://$USERNAME@$DEVICE_IP:$SSH_PORT/storage/emulated/0/Vault/git/$REPO_NAME"
-echo "cd ${REPO_NAME%.git}"
+echo "git clone ssh://$USERNAME@$DEVICE_IP:$SSH_PORT/storage/emulated/0/Vault/git/$REPO_NAME && cd ${REPO_NAME%.git}"
 echo -e "git branch -m main master"
