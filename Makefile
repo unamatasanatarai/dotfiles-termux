@@ -1,4 +1,7 @@
-.PHONY: all
+.PHONY: all update
 
 all:
-	@./install.sh
+	@bash -c 'source preflight/all.sh && source apps/all.sh'
+
+update:
+	@bash -c 'source apps/all.sh'

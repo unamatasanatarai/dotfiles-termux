@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-pkg update
+pkg update -y
 pkg upgrade -y

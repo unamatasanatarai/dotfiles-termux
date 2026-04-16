@@ -2,4 +2,3 @@
 
 source preflight/upgrade.sh
 source preflight/storage.sh
-source preflight/directories.sh

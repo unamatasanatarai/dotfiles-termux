@@ -13,64 +13,59 @@ PASSPHRASE=""                     # ← empty = no passphrase
 KEY_FILE="${HOME}/.ssh/${KEY_NAME}"
 
 # ────────────────────────────────────────────────
-#  Safety checks
+#  Always deploy config and boot script
+# ────────────────────────────────────────────────
+
+install -d -m 700 "${HOME}/.ssh"
+install -d -m 700 "${HOME}/.termux/boot"
+cp apps/termux-boot-start-sshd "$HOME/.termux/boot/start-sshd"
+
+[[ -f "$PREFIX/etc/ssh/sshd_config.bkp" ]] || \
+    mv "$PREFIX/etc/ssh/sshd_config" "$PREFIX/etc/ssh/sshd_config.bkp"
+cp "apps/sshd_config" "$PREFIX/etc/ssh/sshd_config"
+
+# ────────────────────────────────────────────────
+#  Key generation (skip if key already exists)
 # ────────────────────────────────────────────────
 
 if [[ -f "${KEY_FILE}" || -f "${KEY_FILE}.pub" ]]; then
-    echo "ERROR: Key already exists → ${KEY_FILE}"
-    echo "       Will not overwrite. Delete/rename manually if needed."
+    echo "SSH key already exists → ${KEY_FILE}, skipping keygen."
 else
 
-# Create .ssh directory with correct permissions if missing
-install -d -m 700 "${HOME}/.ssh"
+    cmd=(ssh-keygen
+        -t "${KEY_TYPE}"
+        -f "${KEY_FILE}"
+        -N "${PASSPHRASE}"
+        -q                      # quiet
+    )
 
-# ────────────────────────────────────────────────
-#  Build ssh-keygen command
-# ────────────────────────────────────────────────
+    if [[ -n "${KEY_BITS}" ]]; then
+        cmd+=( -b "${KEY_BITS}" )
+    fi
 
-cmd=(ssh-keygen
-    -t "${KEY_TYPE}"
-    -f "${KEY_FILE}"
-    -N "${PASSPHRASE}"
-    -q                      # quiet
-)
+    if [[ -n "${COMMENT}" ]]; then
+        cmd+=( -C "${COMMENT}" )
+    fi
 
-if [[ -n "${KEY_BITS}" ]]; then
-    cmd+=( -b "${KEY_BITS}" )
-fi
+    echo "Generating SSH key: ${KEY_FILE}"
+    echo "     Type     : ${KEY_TYPE}${KEY_BITS:+ ($KEY_BITS bits)}"
+    echo "     Comment  : ${COMMENT}"
+    echo "     Passphrase: ${PASSPHRASE:+protected}${PASSPHRASE:-none}"
+    echo ""
 
-if [[ -n "${COMMENT}" ]]; then
-    cmd+=( -C "${COMMENT}" )
-fi
+    "${cmd[@]}"
 
-# ────────────────────────────────────────────────
-#  Execute
-# ────────────────────────────────────────────────
+    if [[ -f "${KEY_FILE}" && -f "${KEY_FILE}.pub" ]]; then
+        chmod 600 "${KEY_FILE}"
+        chmod 644 "${KEY_FILE}.pub"
+        echo
+        echo "Success!"
+        echo "Private key →  ${KEY_FILE}"
+        echo "Public key  →  ${KEY_FILE}.pub"
+        echo
+        head -n 1 "${KEY_FILE}.pub"
+    else
+        echo "Something went wrong – key files not created." >&2
+    fi
 
-echo "Generating SSH key: ${KEY_FILE}"
-echo "     Type     : ${KEY_TYPE}${KEY_BITS:+ ($KEY_BITS bits)}"
-echo "     Comment  : ${COMMENT}"
-echo "     Passphrase: ${PASSPHRASE:+protected}${PASSPHRASE:-none}"
-echo ""
-
-"${cmd[@]}"
-
-mkdir -p "$HOME/.termux/boot"
-cp apps/termux-boot-start-sshd "$HOME/.termux/boot/start-sshd"
-mv "$PREFIX/etc/ssh/sshd_config" "$PREFIX/etc/ssh/sshd_config.bkp"
-cp "apps/sshd_config" "$PREFIX/etc/ssh/sshd_config"
-
-# Final status
-if [[ -f "${KEY_FILE}" && -f "${KEY_FILE}.pub" ]]; then
-    chmod 600 "${KEY_FILE}"
-    chmod 644 "${KEY_FILE}.pub"
-    echo
-    echo "Success!"
-    echo "Private key →  ${KEY_FILE}"
-    echo "Public key  →  ${KEY_FILE}.pub"
-    echo
-    head -n 1 "${KEY_FILE}.pub"
-else
-    echo "Something went wrong – key files not created." >&2
-fi
 fi

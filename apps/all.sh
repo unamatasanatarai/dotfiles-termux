@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+source apps/bin.sh
 source apps/termux.sh
 source apps/sshd.sh
 source apps/curl.sh

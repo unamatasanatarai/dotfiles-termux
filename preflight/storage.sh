@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-[[ -d "$HOME/.termux" ]] || termux-setup-storage
+[[ -d "$HOME/storage" ]] || termux-setup-storage
