@@ -19,9 +19,9 @@ make
 
 > When prompted by Android, grant Storage permission for `termux-setup-storage`.
 
-## Re-applying config changes
+## Re-applying changes
 
-To re-install/update app configs without running a full `pkg upgrade`:
+To sync changes made in the repository (re-links scripts and config files) or refresh packages:
 
 ```sh
 make update
@@ -30,14 +30,14 @@ make update
 ## Structure
 
 ```
-preflight/   # run before apps: upgrade, storage
-apps/        # one script per app: install + deploy config
+preflight/   # initial setup (upgrade, storage)
+apps/        # app installers and configuration symlinking
 bin/         # scripts symlinked to ~/bin
 ```
 
 ## Adding a new app
 
-1. Create `apps/myapp.sh` — `pkg install myapp -y` + copy any config files
+1. Create `apps/myapp.sh` — `pkg install myapp -y` + symlink any config files
 2. Add `source apps/myapp.sh` to `apps/all.sh`
 
 ## Q&A

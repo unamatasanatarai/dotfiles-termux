@@ -9,4 +9,3 @@ source apps/tmux.sh
 source apps/vim.sh
 source apps/bash.sh
 source apps/shfmt.sh
-

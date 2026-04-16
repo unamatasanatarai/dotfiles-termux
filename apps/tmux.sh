@@ -2,4 +2,4 @@
 
 pkg install tmux -y
 mkdir -p "$HOME/.config/tmux"
-cp apps/tmux.conf "$HOME/.config/tmux/"
+ln -sf "$PWD/apps/tmux.conf" "$HOME/.config/tmux/tmux.conf"

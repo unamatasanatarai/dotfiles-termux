@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 pkg install bash -y
-cp apps/.bashrc "$HOME"
+ln -sf "$PWD/apps/.bashrc" "$HOME/.bashrc"

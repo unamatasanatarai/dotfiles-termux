@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 pkg install vim -y
-cp apps/.vimrc "$HOME"
+ln -sf "$PWD/apps/.vimrc" "$HOME/.vimrc"
