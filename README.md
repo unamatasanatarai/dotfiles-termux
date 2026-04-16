@@ -30,7 +30,7 @@ make update
 ## Structure
 
 ```
-preflight/   # run before apps: upgrade, storage, directories
+preflight/   # run before apps: upgrade, storage
 apps/        # one script per app: install + deploy config
 bin/         # scripts symlinked to ~/bin
 ```
