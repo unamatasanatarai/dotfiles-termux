@@ -1,61 +1,73 @@
 # dotfiles-termux
 
-Termux configuration for mobile home devices — bootstraps packages, SSH, tmux, vim, and bash in one command.
+> **Termux configuration for mobile home devices.**
+
+![Platform](https://img.shields.io/badge/Platform-Termux-orange.svg)
+![Shell](https://img.shields.io/badge/Shell-Bash-blue.svg)
+[![License: GPL v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](LICENSE)
+
+---
 
 <div align="center">
-  <img src="qr-code.png" width="280" alt="QR Code" />
-  <p><b>Scan QR to clone repo</b></p>
+  <img src="qr-code.png" width="280" alt="Setup QR Code" />
+  <p><i>Scan the QR code to clone the repository or use the one-liner below.</i></p>
 </div>
 
-## ✨ Features
+---
 
-- **Automated Bootstrap**: One command to set up your entire environment.
-- **SSH Ready**: Pre-configures `sshd` with auto-start on boot.
-- **Developer Tools**: Includes `tmux`, `vim`, `git`, `curl`, and `shfmt`.
-- **Sensible Defaults**: Pre-configured `.bashrc`, `.vimrc`, and `.tmux.conf`.
-- **Android Integration**: Quick setup for storage access and wake lock.
+## 🚀 Instant Deployment
 
-## 🚀 First-time setup
-
-1. Install **[Termux](https://termux.dev)** via F-Droid (not Play Store).
-2. Run the simple setup script:
+Transform your Termux environment with a single command. This bootstrap script handles package updates, core utilities, and local configurations automatically.
 
 ```sh
-pkg install git -y
-git clone https://github.com/unamatasanatarai/dotfiles-termux
-cd dotfiles-termux
-bash first-run.sh
+pkg install curl -y && bash -c "$(curl -fsSL https://raw.githubusercontent.com/unamatasanatarai/dotfiles-termux/refs/heads/master/first-run.sh)"
 ```
 
-*(Alternatively, run `make` if you've already cloned and updated your system packages.)*
-
 > [!IMPORTANT]
-> When prompted by Android, grant **Storage permission** for `termux-setup-storage`.
+> **Android Permissions**: You will be prompted to grant Storage access and Wake Lock. These are essential for the background SSH server and persistent operations.
 
-## 🔄 Management
+## ✨ Key Features
 
-### Re-applying changes
-To sync changes made in the repository (re-links scripts and config files) or refresh packages:
+- **🛡️ Secure Access**: Pre-configured `sshd` with auto-start on boot via Termux-Boot.
+- **🛠️ Power Tools**: Full suite including `tmux`, `vim`, `git`, `curl`, and `shfmt`.
+- **🎨 Sensible Defaults**: Optimized configurations for a productive mobile terminal experience.
+- **🔋 Battery Optimized**: Integrated Wake Lock management to prevent service interruption.
+- **📂 Storage Ready**: Easy access to Android storage and SD cards.
+
+## 🔄 Lifecycle Management
+
+### Synchronizing Changes
+Keep your environment up to date with the latest configurations and package versions:
 ```sh
 make update
 ```
 
-### Structure
-- `preflight/` — Initial system setup (upgrade, storage).
-- `apps/`      — App installers and configuration symlinking.
-- `bin/`       — Helper scripts symlinked to `~/bin`.
+### Repository Structure
+An organized layout ensures easy customization and maintenance:
+- **`preflight/`** — Low-level system initialization (upgrades, permissions).
+- **`apps/`**      — Application-specific setup scripts and configuration linking.
+- **`bin/`**       — Custom helper scripts automatically symlinked to your `~/bin`.
 
 ## 🛠️ Customization
 
-1. Create `apps/myapp.sh` — `pkg install myapp -y` + symlink any config files.
-2. Add `source apps/myapp.sh` to `apps/all.sh`.
+Extend the ecosystem by adding your own specialized tools:
 
-## ❓ Q&A
+1. **New Script**: Create `apps/myapp.sh` with your installation logic.
+2. **Integration**: Add `source apps/myapp.sh` to `apps/all.sh`.
+3. **Deploy**: Run `make` to apply the changes.
 
-**How do I access SD card storage?**
+## ❓ Troubleshooting & FAQ
+
+**Q: How do I access external SD card storage?**
+A: Termux uses a symlink system. After running the setup, you can link your specific SD card ID:
 ```sh
 cd ~/storage
-ln -s /storage/0123-4567 sdcard   # replace 0123-4567 with your actual SD card ID
-ls ~/storage/sdcard
+ln -s /storage/0123-4567 sdcard   # Replace with your SD card ID
 ```
-*Note: Get the SD card ID from a file manager like Total Commander.*
+*Tip: Use a file manager (like Total Commander) to find your exact SD card mount ID.*
+
+---
+
+<div align="center">
+  Built with 🧛🏽‍♂️ for the Termux Community.
+</div>
