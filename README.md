@@ -18,17 +18,16 @@ Termux configuration for mobile home devices — bootstraps packages, SSH, tmux,
 ## 🚀 First-time setup
 
 1. Install **[Termux](https://termux.dev)** via F-Droid (not Play Store).
-2. Run the following commands:
+2. Run the simple setup script:
 
 ```sh
-pkg update -y && pkg upgrade -y
-termux-setup-storage
-termux-wake-lock
-pkg install git make -y
+pkg install git -y
 git clone https://github.com/unamatasanatarai/dotfiles-termux
 cd dotfiles-termux
-make
+bash first-run.sh
 ```
+
+*(Alternatively, run `make` if you've already cloned and updated your system packages.)*
 
 > [!IMPORTANT]
 > When prompted by Android, grant **Storage permission** for `termux-setup-storage`.

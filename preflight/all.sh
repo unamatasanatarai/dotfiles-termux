@@ -2,3 +2,4 @@
 
 source preflight/upgrade.sh
 source preflight/storage.sh
+source preflight/wake-lock.sh
