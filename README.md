@@ -20,7 +20,7 @@
 Transform your Termux environment with a single command. This bootstrap script handles package updates, core utilities, and local configurations automatically.
 
 ```sh
-pkg install curl -y && bash -c "$(curl -fsSL https://raw.githubusercontent.com/unamatasanatarai/dotfiles-termux/refs/heads/master/first-run.sh)"
+pkg update -y; pkg upgrade -y; pkg install curl -y && bash -c "$(curl -fsSL https://raw.githubusercontent.com/unamatasanatarai/dotfiles-termux/refs/heads/master/first-run.sh)"
 ```
 
 > [!IMPORTANT]
