@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+if (( $# != 1 )); then
+    printf 'Usage: %s "<ssh-public-key>"\n' "${0##*/}" >&2
+    exit 64
+fi
+
+ssh_dir="$HOME/.ssh"
+auth_keys="$ssh_dir/authorized_keys"
+
+mkdir -p "$ssh_dir"
+if (( $? != 0 )); then
+    printf 'Failed to create directory: %s\n' "$ssh_dir" >&2
+    exit 73
+fi
+
+chmod 700 "$ssh_dir"
+if (( $? != 0 )); then
+    printf 'Failed to set permissions on: %s\n' "$ssh_dir" >&2
+    exit 77
+fi
+
+printf '%s\n' "$1" >>"$auth_keys"
+if (( $? != 0 )); then
+    printf 'Failed to write key: %s\n' "$auth_keys" >&2
+    exit 74
+fi
+
+chmod 600 "$auth_keys"
+if (( $? != 0 )); then
+    printf 'Failed to set permissions on: %s\n' "$auth_keys" >&2
+    exit 77
+fi
+
+exit 0
