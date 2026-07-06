@@ -28,42 +28,12 @@ chmod -R 700 "$REPO_NAME"
 # Add repository to safe.directory to avoid ownership errors
 git config --global --add safe.directory "$REPO_DIR/$REPO_NAME"
 
-# Use Termux's tmp directory (usually /data/data/com.termux/files/usr/tmp)
-WORK_DIR="${TMPDIR:-$HOME/tmp}/git-work-$(basename "$REPO_NAME" .git)"
-mkdir -p "$WORK_DIR"
-cd "$WORK_DIR" || exit 1
-
-# Clone the bare repository locally
-git clone "$REPO_DIR/$REPO_NAME" .
-git branch -m main master
-
-# Create .gitignore file
-cat <<EOT > .gitignore
-.DS_Store
-.idea/
-*.swp
-*.swo
-*.bak
-*.log
-Thumbs.db
-EOT
-
-# Add, commit, and push .gitignore
-git add .gitignore
-git commit -m "Add .gitignore for macOS"
-git push -u origin master
-
-# Clean up temporary working directory
-cd "$REPO_DIR"
-rm -rf "$WORK_DIR"
-
 # Output success message
-echo "Repository created successfully."
-
 echo "Add to repo with:"
 echo
-echo "git init"
+echo "git init; giume"
 echo "git remote add origin ssh://$USERNAME@$DEVICE_IP:$SSH_PORT/storage/emulated/0/Vault/git/$REPO_NAME"
+echo "git add --all; git commit -m 'Go'"
 echo "git branch -M master; git push -u origin master"
 echo 
 echo 
